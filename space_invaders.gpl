@@ -1,29 +1,83 @@
-int window_width = 500;
-int window_height = 500;
+int window_width = 1000;
+int window_height = 1000;
 string window_title = "Spaaaaaaaaaaaaaaaaaaaaaaace";
-int animation_speed = 80;
+int animation_speed = 50;
 double window_red = 0;
 double window_blue = 0;
 double window_green = 0;
 
 // Variable declaration
-int num = 5;  // Number of aliens
+int num = 25;  // Number of aliens
+int alien_starting_height = 600;
 int alien_space = 50; // Space between aliens
+int alien_increment = 1;
+int alien_width = 5; // for the side of the window
 int i;
 
 // Test "aliens"
-
 rectangle aliens[num];
 triangle hero(x = 250, y = 100, size = 30);
+
+// Animations
+forward animation alien_move(rectangle alien);
 
 initialization 
 {
   for(i = 0; i < num; i += 1)
   {
-    aliens[i].x = 50 + (i*alien_space);
-    aliens[i].y = 400;
+    if(i < alien_width)
+    {
+      aliens[i].x = 50 + (i*alien_space);
+      aliens[i].y = alien_starting_height;
+      aliens[i].user_int = i;
+      aliens[i].animation_block = alien_move;
+    }
+    if(i > alien_width-1 && i < alien_width*2)
+    {
+      aliens[i].x = 50 + (i%5*alien_space);
+      aliens[i].y = alien_starting_height-50;
+      aliens[i].user_int = i;
+      aliens[i].animation_block = alien_move;
+    }
+    if(i > alien_width*2 - 1 && i < alien_width*3)
+    {
+      aliens[i].x = 50 + (i%5*alien_space);
+      aliens[i].y = alien_starting_height-100;
+      aliens[i].user_int = i;
+      aliens[i].animation_block = alien_move; 
+    }
+    if(i > alien_width*3 - 1 && i < alien_width*4)
+    {
+      aliens[i].x = 50 + (i%5*alien_space);
+      aliens[i].y = alien_starting_height-150;
+      aliens[i].user_int = i;
+      aliens[i].animation_block = alien_move; 
+    }
+    if(i > alien_width*4 - 1 && i < alien_width*5)
+    {
+      aliens[i].x = 50 + (i%5*alien_space);
+      aliens[i].y = alien_starting_height-200;
+      aliens[i].user_int = i;
+      aliens[i].animation_block = alien_move; 
+    }
   }
 
   hero.x = 250;
   hero.y = 100;
+}
+
+animation alien_move(rectangle alien)
+{
+  if(aliens[4].x + alien_width > window_width || aliens[0].x < 0)
+  {
+    alien_increment = -alien_increment;
+    for(i = 0; i < num; i += 1)
+    {
+      aliens[i].y -= 20;
+    }
+  }
+  for(i = 0; i < num; i += 1)
+  {
+    aliens[i].x += alien_increment;
+  }
 }

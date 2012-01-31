@@ -81,3 +81,15 @@ animation alien_move(rectangle alien)
     aliens[i].x += alien_increment;
   }
 }
+
+on leftarrow
+{
+  if(hero.x > 0)
+    hero.x -= 5;
+}
+
+on rightarrow
+{
+  if(hero.x < window_width)
+    hero.x += 5;
+}

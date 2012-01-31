@@ -1,7 +1,7 @@
 int window_width = 1000;
 int window_height = 1000;
 string window_title = "Spaaaaaaaaaaaaaaaaaaaaaaace";
-int animation_speed = 50;
+int animation_speed = 70;
 double window_red = 0;
 double window_blue = 0;
 double window_green = 0;
@@ -10,55 +10,65 @@ double window_green = 0;
 int num = 25;  // Number of aliens
 int alien_starting_height = 600;
 int alien_space = 50; // Space between aliens
-int alien_increment = 1;
+int alien_increment = 5;
 int alien_width = 5; // for the side of the window
+int hero_move = 15;
+int hero_laser_increment = 35;
+int count_aliens = num;
 int i;
+string win_text = "You defended Earth! Way to go!";
 
 // Test "aliens"
 rectangle aliens[num];
 triangle hero(x = 250, y = 100, size = 30);
+rectangle hero_laser();
 
 // Animations
 forward animation alien_move(rectangle alien);
+forward animation hero_laser_move(rectangle hero_lasers);
 
 initialization 
 {
+  // Laser initialization
+  hero_laser.w = 3;
+  hero_laser.h = 8;
+  hero_laser.visible = false;
+  hero_laser.animation_block = hero_laser_move;
+
+  // Alien initialization
   for(i = 0; i < num; i += 1)
   {
+    if(i == 0)
+      aliens[i].animation_block = alien_move;
     if(i < alien_width)
     {
       aliens[i].x = 50 + (i*alien_space);
       aliens[i].y = alien_starting_height;
       aliens[i].user_int = i;
-      aliens[i].animation_block = alien_move;
     }
     if(i > alien_width-1 && i < alien_width*2)
     {
       aliens[i].x = 50 + (i%5*alien_space);
       aliens[i].y = alien_starting_height-50;
       aliens[i].user_int = i;
-      aliens[i].animation_block = alien_move;
     }
     if(i > alien_width*2 - 1 && i < alien_width*3)
     {
       aliens[i].x = 50 + (i%5*alien_space);
       aliens[i].y = alien_starting_height-100;
       aliens[i].user_int = i;
-      aliens[i].animation_block = alien_move; 
     }
     if(i > alien_width*3 - 1 && i < alien_width*4)
     {
       aliens[i].x = 50 + (i%5*alien_space);
       aliens[i].y = alien_starting_height-150;
       aliens[i].user_int = i;
-      aliens[i].animation_block = alien_move; 
     }
     if(i > alien_width*4 - 1 && i < alien_width*5)
     {
       aliens[i].x = 50 + (i%5*alien_space);
       aliens[i].y = alien_starting_height-200;
       aliens[i].user_int = i;
-      aliens[i].animation_block = alien_move; 
     }
   }
 
@@ -82,14 +92,46 @@ animation alien_move(rectangle alien)
   }
 }
 
+animation hero_laser_move(rectangle hero_lasers)
+{
+  hero_laser.y += hero_laser_increment;
+  if(hero_laser.y >= window_height)
+    hero_laser.visible = false;
+  for(i = 0; i < num; i += 1)
+  {
+    if(hero_laser.visible == true)
+    {
+      if(hero_laser near aliens[i])
+      {
+        hero_laser.visible = false;
+        aliens[i].visible = false;
+        aliens[i].y += window_height*2;
+        count_aliens -= 1;
+        if(count_aliens == 0)
+          exit(0);
+      }
+    }
+  }
+}
+
 on leftarrow
 {
   if(hero.x > 0)
-    hero.x -= 5;
+    hero.x -= hero_move;
 }
 
 on rightarrow
 {
   if(hero.x < window_width)
-    hero.x += 5;
+    hero.x += hero_move;
+}
+
+on space
+{
+  if(hero_laser.visible == false)
+  {
+    hero_laser.visible = true;
+    hero_laser.x = hero.x + hero.w/2;
+    hero_laser.y = hero.y + hero.h;
+  }
 }

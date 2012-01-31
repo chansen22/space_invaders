@@ -15,17 +15,20 @@ int alien_width = 5; // for the side of the window
 int hero_move = 15;
 int hero_laser_increment = 35;
 int count_aliens = num;
+int alien_laser_increment = 35;
+int alien_random;
 int i;
-string win_text = "You defended Earth! Way to go!";
 
 // Test "aliens"
 rectangle aliens[num];
 triangle hero(x = 250, y = 100, size = 30);
 rectangle hero_laser();
+rectangle alien_laser();
 
 // Animations
 forward animation alien_move(rectangle alien);
 forward animation hero_laser_move(rectangle hero_lasers);
+forward animation alien_laser_move(rectangle alien_lasers);
 
 initialization 
 {
@@ -34,6 +37,11 @@ initialization
   hero_laser.h = 8;
   hero_laser.visible = false;
   hero_laser.animation_block = hero_laser_move;
+
+  alien_laser.w = 3;
+  alien_laser.h = 8;
+  alien_laser.visible = false;
+  alien_laser.animation_block = alien_laser_move;
 
   // Alien initialization
   for(i = 0; i < num; i += 1)
@@ -86,9 +94,16 @@ animation alien_move(rectangle alien)
       aliens[i].y -= 20;
     }
   }
+  alien_random = random(25);
   for(i = 0; i < num; i += 1)
   {
     aliens[i].x += alien_increment;
+    if(alien_laser.visible == false && alien_random == i)
+    {
+      alien_laser.visible = true;
+      alien_laser.x = aliens[i].x + aliens[i].w/2;
+      alien_laser.y = aliens[i].y;
+    }
   }
 }
 
@@ -111,6 +126,18 @@ animation hero_laser_move(rectangle hero_lasers)
           exit(0);
       }
     }
+  }
+}
+
+animation alien_laser_move(rectangle alien_lasers)
+{
+  alien_laser.y -= alien_laser_increment;
+  if(alien_laser.y <= 0)
+    alien_laser.visible = false;
+  if(alien_laser near hero)
+  {
+    print("You suck, you died.");
+    exit(0);
   }
 }
 

@@ -98,11 +98,14 @@ animation alien_move(rectangle alien)
   for(i = 0; i < num; i += 1)
   {
     aliens[i].x += alien_increment;
-    if(alien_laser.visible == false && alien_random == i)
+    if(aliens[i].visible == true)
     {
-      alien_laser.visible = true;
-      alien_laser.x = aliens[i].x + aliens[i].w/2;
-      alien_laser.y = aliens[i].y;
+      if(alien_laser.visible == false && alien_random == i)
+      {
+        alien_laser.visible = true;
+        alien_laser.x = aliens[i].x + aliens[i].w/2;
+        alien_laser.y = aliens[i].y;
+      }
     }
   }
 }
@@ -136,7 +139,6 @@ animation alien_laser_move(rectangle alien_lasers)
     alien_laser.visible = false;
   if(alien_laser near hero)
   {
-    print("You suck, you died.");
     exit(0);
   }
 }

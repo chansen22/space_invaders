@@ -154,7 +154,7 @@ on leftarrow
 
 on rightarrow
 {
-  if(hero.x < window_width)
+  if(hero.x < window_width-20)
     hero.x += hero_move;
 }
 

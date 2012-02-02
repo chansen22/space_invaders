@@ -94,9 +94,12 @@ animation alien_move(rectangle alien)
       aliens[i].y -= 20;
     }
   }
+
   alien_random = random(25);
   for(i = 0; i < num; i += 1)
   {
+    if(aliens[i].y <= 150)
+      exit(0);
     aliens[i].x += alien_increment;
     if(aliens[i].visible == true)
     {

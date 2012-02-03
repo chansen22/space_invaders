@@ -93,7 +93,8 @@ animation alien_move(rectangle alien)
     alien_increment = -alien_increment;
     for(i = 0; i < num; i += 1)
     {
-      aliens[i].y -= 20;
+      aliens[i].y -= 20;            
+      alien_speed -= 10;
     }
   }
 

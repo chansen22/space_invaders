@@ -1,7 +1,7 @@
 int window_width = 1000;
 int window_height = 1000;
 string window_title = "Spaaaaaaaaaaaaaaaaaaaaaaace";
-int animation_speed = 92;
+int animation_speed = 95;
 double window_red = 0;
 double window_blue = 0;
 double window_green = 0;
@@ -88,14 +88,16 @@ initialization
 
 animation alien_move(rectangle alien)
 {
-  if(aliens[4].x + alien_width > window_width || aliens[0].x < 0)
+  if(aliens[4].x + alien_width > window_width || aliens[0].x < 0 &&
+    alien_time > 100)
   {
     alien_increment = -alien_increment;
     for(i = 0; i < num; i += 1)
     {
-      aliens[i].y -= 20;            
-      alien_speed -= 10;
+      aliens[i].y -= 20;
+      alien_time = 0;
     }
+    alien_speed = alien_speed * 9 / 10;
   }
 
   alien_random = random(25);
@@ -129,7 +131,7 @@ animation hero_laser_move(rectangle hero_lasers)
   {
     if(hero_laser.visible == true)
     {
-      if(hero_laser near aliens[i])
+      if(hero_laser touches aliens[i])
       {
         hero_laser.visible = false;
         aliens[i].visible = false;

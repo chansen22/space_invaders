@@ -14,11 +14,13 @@ int alien_increment = 20;
 int alien_speed = 85;
 int alien_time = 0;
 int alien_width = 5; // for the side of the window
+int alien_laser_increment = 2;
+int alien_random;
 int hero_move = 15;
 int hero_laser_increment = 2;
 int count_aliens = num;
-int alien_laser_increment = 2;
-int alien_random;
+int block_num = 3;
+int block_count[block_num];
 int i;
 
 // Test "aliens"
@@ -26,11 +28,13 @@ rectangle aliens[num];
 triangle hero(x = 250, y = 100, size = 30);
 rectangle hero_laser();
 rectangle alien_laser();
+rectangle blocks[block_num];
 
 // Animations
 forward animation alien_move(rectangle alien);
 forward animation hero_laser_move(rectangle hero_lasers);
 forward animation alien_laser_move(rectangle alien_lasers);
+forward animation block_laser(rectangle block);
 
 initialization 
 {
@@ -80,6 +84,16 @@ initialization
       aliens[i].y = alien_starting_height-200;
       aliens[i].user_int = i;
     }
+  }
+
+  for(i = 1; i < block_num+1; i += 1)
+  {
+    blocks[i-1].x = 200*i;
+    blocks[i-1].y = 200;
+    blocks[i-1].w = 90;
+    blocks[i-1].h = 50;
+    blocks[i-1].animation_block = block_laser;
+    blocks[i-1].user_int = i-1;
   }
 
   hero.x = 250;
@@ -149,9 +163,35 @@ animation alien_laser_move(rectangle alien_lasers)
   alien_laser.y -= alien_laser_increment;
   if(alien_laser.y <= 0)
     alien_laser.visible = false;
-  if(alien_laser near hero)
+  if(alien_laser touches hero)
   {
     exit(0);
+  }
+}
+  
+animation block_laser(rectangle block)
+{
+  if(alien_laser touches block && block.visible == true)
+  {
+    alien_laser.visible = false;
+    block_count[block.user_int] += 1;
+    if(block_count[block.user_int] > 2)
+    {
+      blocks[block.user_int].visible = false;
+    }
+  }
+  if(hero_laser touches block && block.visible == true)
+  {
+    if(hero_laser.visible == true)
+    {
+        
+      hero_laser.visible = false;
+      block_count[block.user_int] += 1;
+    }
+    if(block_count[block.user_int] > 2)
+    {
+      blocks[block.user_int].visible = false;
+    }
   }
 }
 

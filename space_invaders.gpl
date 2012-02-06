@@ -19,7 +19,7 @@ int alien_random;
 int hero_move = 15;
 int hero_laser_increment = 2;
 int count_aliens = num;
-int block_num = 3;
+int block_num = 5;
 int block_count[block_num];
 int i;
 
@@ -106,10 +106,8 @@ initialization
   for(i = 1; i < block_num+1; i += 1)
   {
     blocks[i-1].filename= "./img/block0.bmp";
-    blocks[i-1].x = 200*i;
+    blocks[i-1].x = 100*i;
     blocks[i-1].y = 200;
-    blocks[i-1].w = 90;
-    blocks[i-1].h = 50;
     blocks[i-1].animation_block = block_laser;
     blocks[i-1].user_int = i-1;
   }

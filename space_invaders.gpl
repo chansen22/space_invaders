@@ -10,8 +10,8 @@ double window_green = 0;
 int num = 25;  // Number of aliens
 int alien_starting_height = 600;
 int alien_space = 50; // Space between aliens
-int alien_increment = 20;
-int alien_speed = 85;
+int alien_increment = 25;
+int alien_speed = 80;
 int alien_time = 0;
 int alien_width = 5; // for the side of the window
 int alien_laser_increment = 2;
@@ -24,7 +24,7 @@ int block_count[block_num];
 int i;
 
 // Test "aliens"
-rectangle aliens[num];
+pixmap aliens[num];
 triangle hero(x = 250, y = 100, size = 30);
 rectangle hero_laser();
 rectangle alien_laser();
@@ -52,6 +52,7 @@ initialization
   // Alien initialization
   for(i = 0; i < num; i += 1)
   {
+    aliens[i].filename= "./img/space1.bmp";
     if(i == 0)
       aliens[i].animation_block = alien_move;
     if(i < alien_width)
@@ -122,7 +123,10 @@ animation alien_move(rectangle alien)
     if(!(alien_time % alien_speed))
     {
       aliens[i].x += alien_increment;
-    }
+      if(aliens[i].filename == "./img/space1.bmp")
+        aliens[i].filename = "./img/space2.bmp";
+      else
+        aliens[i].filename = "./img/space1.bmp";}
     if(aliens[i].visible == true)
     {
       if(alien_laser.visible == false && alien_random == i)

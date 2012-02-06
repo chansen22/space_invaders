@@ -1,6 +1,6 @@
 int window_width = 1000;
 int window_height = 1000;
-string window_title = "Spaaaaaaaaaaaaaaaaaaaaaaace";
+string window_title = "Space Invaders!";
 int animation_speed = 95;
 double window_red = 0;
 double window_blue = 0;
@@ -29,6 +29,8 @@ triangle hero(x = 250, y = 100, size = 30);
 rectangle hero_laser();
 rectangle alien_laser();
 rectangle blocks[block_num];
+textbox win_condition(x = 100, y = 20, text = "Congrats! You won! Press Q to quit.", size = .1);
+textbox lose_condition(x = 100, y = 20, text = "Bummer! You lost! Press Q to quit.", size = .1);
 
 // Animations
 forward animation alien_move(rectangle alien);
@@ -39,6 +41,20 @@ forward animation block_laser(rectangle block);
 initialization 
 {
   // Laser initialization
+  win_condition.visible = false;
+  win_condition.blue = 1;
+  win_condition.red = 1;
+  win_condition.green = 1;
+  win_condition.x = 500;
+  win_condition.y = 500;
+
+  lose_condition.visible = false;
+  lose_condition.blue = 1;
+  lose_condition.red = 1;
+  lose_condition.green = 1;
+  lose_condition.x = 500;
+  lose_condition.y = 100;
+
   hero_laser.w = 3;
   hero_laser.h = 8;
   hero_laser.visible = false;
@@ -142,21 +158,24 @@ animation alien_move(rectangle alien)
 
 animation hero_laser_move(rectangle hero_lasers)
 {
-  hero_laser.y += hero_laser_increment;
-  if(hero_laser.y >= window_height)
-    hero_laser.visible = false;
-  for(i = 0; i < num; i += 1)
+  if(hero.visible == true)
   {
-    if(hero_laser.visible == true)
+    hero_laser.y += hero_laser_increment;
+    if(hero_laser.y >= window_height)
+      hero_laser.visible = false;
+    for(i = 0; i < num; i += 1)
     {
-      if(hero_laser touches aliens[i])
+      if(hero_laser.visible == true)
       {
-        hero_laser.visible = false;
-        aliens[i].visible = false;
-        aliens[i].y += window_height*2;
-        count_aliens -= 1;
-        if(count_aliens == 0)
-          exit(0);
+        if(hero_laser touches aliens[i])
+        {
+          hero_laser.visible = false;
+          aliens[i].visible = false;
+          aliens[i].y += window_height*2;
+          count_aliens -= 1;
+          if(count_aliens == 0)
+            win_condition.visible = true;
+        }
       }
     }
   }
@@ -169,7 +188,8 @@ animation alien_laser_move(rectangle alien_lasers)
     alien_laser.visible = false;
   if(alien_laser touches hero)
   {
-    exit(0);
+    hero.visible = false;
+    lose_condition.visible = true;
   }
 }
   
@@ -213,7 +233,7 @@ on rightarrow
 
 on space
 {
-  if(hero_laser.visible == false)
+  if(hero_laser.visible == false && hero.visible == true)
   {
     hero_laser.visible = true;
     hero_laser.x = hero.x + hero.w/2;

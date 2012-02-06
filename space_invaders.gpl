@@ -10,8 +10,8 @@ double window_green = 0;
 int num = 25;  // Number of aliens
 int alien_starting_height = 600;
 int alien_space = 50; // Space between aliens
-int alien_increment = 25;
-int alien_speed = 80;
+int alien_increment = 20;
+int alien_speed = 90;
 int alien_time = 0;
 int alien_width = 5; // for the side of the window
 int alien_laser_increment = 2;
@@ -28,7 +28,7 @@ pixmap aliens[num];
 triangle hero(x = 250, y = 100, size = 30);
 rectangle hero_laser();
 rectangle alien_laser();
-rectangle blocks[block_num];
+pixmap blocks[block_num];
 textbox win_condition(x = 100, y = 20, text = "Congrats! You won! Press Q to quit.", size = .1);
 textbox lose_condition(x = 100, y = 20, text = "Bummer! You lost! Press Q to quit.", size = .1);
 
@@ -105,6 +105,7 @@ initialization
 
   for(i = 1; i < block_num+1; i += 1)
   {
+    blocks[i-1].filename= "./img/block0.bmp";
     blocks[i-1].x = 200*i;
     blocks[i-1].y = 200;
     blocks[i-1].w = 90;
@@ -199,7 +200,8 @@ animation block_laser(rectangle block)
   {
     alien_laser.visible = false;
     block_count[block.user_int] += 1;
-    if(block_count[block.user_int] > 2)
+    blocks[block.user_int].filename= "./img/block" + block_count[block.user_int] + ".bmp";
+    if(block_count[block.user_int] > 3)
     {
       blocks[block.user_int].visible = false;
     }
@@ -208,11 +210,11 @@ animation block_laser(rectangle block)
   {
     if(hero_laser.visible == true)
     {
-        
       hero_laser.visible = false;
       block_count[block.user_int] += 1;
+      blocks[block.user_int].filename= "./img/block" + block_count[block.user_int] + ".bmp";
     }
-    if(block_count[block.user_int] > 2)
+    if(block_count[block.user_int] > 3)
     {
       blocks[block.user_int].visible = false;
     }

@@ -40,7 +40,6 @@ forward animation block_laser(rectangle block);
 
 initialization 
 {
-  // Laser initialization
   win_condition.visible = false;
   win_condition.blue = 1;
   win_condition.red = 1;
@@ -55,6 +54,7 @@ initialization
   lose_condition.x = 500;
   lose_condition.y = 100;
 
+  // Laser initialization
   hero_laser.w = 3;
   hero_laser.h = 8;
   hero_laser.visible = false;

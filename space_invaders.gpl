@@ -103,13 +103,13 @@ initialization
     }
   }
 
-  for(i = 1; i < block_num+1; i += 1)
+  for(i = 0; i < block_num; i += 1)
   {
-    blocks[i-1].filename= "./img/block0.bmp";
-    blocks[i-1].x = 100*i;
-    blocks[i-1].y = 200;
-    blocks[i-1].animation_block = block_laser;
-    blocks[i-1].user_int = i-1;
+    blocks[i].filename= "./img/block0.bmp";
+    blocks[i].x = 170*i + 100;
+    blocks[i].y = 200;
+    blocks[i].animation_block = block_laser;
+    blocks[i].user_int = i;
   }
 
   hero.x = 250;
